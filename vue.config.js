@@ -17,12 +17,5 @@ module.exports = defineConfig({
         }
       }
     }
-  },
-  css: {
-    loaderOptions: {
-      sass: {
-        prependData: '@import "@/styles/common.scss";'
-      }
-    }
   }
 })

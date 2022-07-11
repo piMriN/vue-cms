@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { Message } from 'element-ui'
+import exceptionMessage from './exception-message'
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -23,7 +25,7 @@ instance.interceptors.response.use(
     if (response.data.code === 200) {
       return response.data.data
     }
-    // _showErrorMessage(response.data.code, response.data.msg)
+    _showErrorMessage(response.data.code, response.data.msg)
   },
   function (error) {
     console.log('2')
@@ -32,10 +34,10 @@ instance.interceptors.response.use(
 )
 
 // 错误消息提示
-// const _showErrorMessage = (code, msg) => {
-//   const message = exceptionMessage[code] || msg || '未知错误'
-//   Message({ message, type: 'error' })
-// }
+const _showErrorMessage = (code, msg) => {
+  const message = exceptionMessage[code] || msg || '未知错误'
+  Message({ message, type: 'error' })
+}
 
 const request = (options) => {
   if (options.method.toLowerCase() === 'get') {

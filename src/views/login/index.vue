@@ -21,15 +21,24 @@
           ></el-input>
         </el-form-item>
         <el-form-item prop="code">
-          <el-input
-            v-model="form.code"
-            placeholder="请输入验证码"
-            class="yzm"
-          ></el-input>
-          <el-image :src="codeImageUrl"></el-image>
+          <div class="verify">
+            <el-input
+              v-model="form.code"
+              placeholder="请输入验证码"
+              class="yzm"
+              @click.stop="handleCodeRefresh"
+            ></el-input>
+            <el-image :src="codeImageUrl"></el-image>
+          </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-button">登录</el-button>
+          <el-button
+            class="login-button"
+            :loading="loadingStatus"
+            @click="handleVerifyForm"
+            type="danger"
+            >{{ loadingStatus ? '登录中...' : '立即登录' }}</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -39,8 +48,10 @@
 <script>
 import rules from './rules'
 import UserApi from '../../api/user'
+import { mapActions } from 'vuex'
 
 export default {
+  name: 'index',
   data() {
     return {
       form: {
@@ -52,18 +63,57 @@ export default {
       //   登录表单验证
       rules,
       //   验证码路径
-      codeImageUrl: ''
+      codeImageUrl: '',
+      //   loading加载状态
+      loadingStatus: false
     }
   },
   created() {
     this.handleGetCaptcha()
   },
   methods: {
+    // 获取验证码
     async handleGetCaptcha() {
       const { captchaImg, token } = await UserApi.getCaptcha()
       this.codeImageUrl = captchaImg
       this.form.token = token
-    }
+    },
+
+    // 验证码刷新
+    handleCodeRefresh() {
+      this.loginForm.code = ''
+      this.handleGetCaptcha()
+    },
+
+    // 登录表单校验
+    handleVerifyForm() {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.handleSubmitLogin()
+        }
+      })
+    },
+
+    async handleSubmitLogin() {
+      try {
+        const token = await this.login(this.loginForm)
+        if (!token) return
+        this.$notify({ title: '提示', message: '登录成功', type: 'success' })
+        this.loadingStatus = true
+        await this.$router.push('/')
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loadingStatus = false
+      }
+    },
+
+    /**
+     * vuex登录
+     */
+    ...mapActions({
+      login: 'user/login'
+    })
   }
 }
 </script>
@@ -90,10 +140,10 @@ h1 {
 h2 {
   color: #fff;
   font-size: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .login-form {
-  margin: 6% auto 13%;
+  margin: 10% auto 13%;
   width: 20%;
 }
 .verify {
@@ -102,17 +152,14 @@ h2 {
   align-items: center;
 }
 .el-image {
-  width: 300px;
-  height: 55px;
+  width: 200px;
+  height: 40px;
   border-radius: 5px;
+  margin-left: 10px;
   cursor: pointer;
-  margin-top: 10px;
 }
 .login-button {
   width: 100%;
   border-radius: 5px;
-}
-.el-input {
-  margin-right: 100px;
 }
 </style>
