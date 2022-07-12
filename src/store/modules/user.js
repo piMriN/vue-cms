@@ -13,8 +13,8 @@ export default {
     }
   },
   actions: {
-    async login({ commit }, loginForm) {
-      const token = await UserApi.login(loginForm)
+    async login({ commit }, form) {
+      const token = await UserApi.login(form)
       commit('setToken', token)
       return token
     }

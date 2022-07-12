@@ -81,7 +81,7 @@ export default {
 
     // 验证码刷新
     handleCodeRefresh() {
-      this.loginForm.code = ''
+      this.form.code = ''
       this.handleGetCaptcha()
     },
 
@@ -96,7 +96,7 @@ export default {
 
     async handleSubmitLogin() {
       try {
-        const token = await this.login(this.loginForm)
+        const token = await this.login(this.form)
         if (!token) return
         this.$notify({ title: '提示', message: '登录成功', type: 'success' })
         this.loadingStatus = true
