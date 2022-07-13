@@ -1,3 +1,4 @@
+import store from '@/store'
 import axios from 'axios'
 import { Message } from 'element-ui'
 import exceptionMessage from './exception-message'
@@ -11,6 +12,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
+    const token = store.getters.token
+    if (token) {
+      config.headers.token = token
+    }
     return config
   },
   function (error) {
@@ -39,8 +44,9 @@ const _showErrorMessage = (code, msg) => {
   Message({ message, type: 'error' })
 }
 
+// 统一传参处理
 const request = (options) => {
-  if (options.method.toLowerCase() === 'get') {
+  if (options.method.toLoWERCase === 'get') {
     options.params = options.data || {}
   }
   return instance(options)

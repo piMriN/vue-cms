@@ -57,14 +57,14 @@ export default {
       form: {
         username: '',
         password: '',
-        code: '',
-        token: ''
+        token: '',
+        code: ''
       },
-      //   登录表单验证
+      // 登录验证表单
       rules,
-      //   验证码路径
+      // 验证码路径
       codeImageUrl: '',
-      //   loading加载状态
+      // loading加载状态
       loadingStatus: false
     }
   },
@@ -72,7 +72,7 @@ export default {
     this.handleGetCaptcha()
   },
   methods: {
-    // 获取验证码
+    // 调用接口获取验证码
     async handleGetCaptcha() {
       const { captchaImg, token } = await UserApi.getCaptcha()
       this.codeImageUrl = captchaImg
@@ -84,8 +84,7 @@ export default {
       this.form.code = ''
       this.handleGetCaptcha()
     },
-
-    // 登录表单校验
+    // 登录验证表单
     handleVerifyForm() {
       this.$refs.form.validate((valid) => {
         if (valid) {
@@ -93,12 +92,12 @@ export default {
         }
       })
     },
-
+    // 登录提交
     async handleSubmitLogin() {
       try {
         const token = await this.login(this.form)
         if (!token) return
-        this.$notify({ title: '提示', message: '登录成功', type: 'success' })
+        this.$notify({ title: '提示', message: '登陆成功', type: 'success' })
         this.loadingStatus = true
         await this.$router.push('/')
       } catch (e) {
@@ -107,10 +106,7 @@ export default {
         this.loadingStatus = false
       }
     },
-
-    /**
-     * vuex登录
-     */
+    // vuex登录
     ...mapActions({
       login: 'user/login'
     })

@@ -25,7 +25,25 @@ const login = (data) => {
   })
 }
 
+// 获取用户信息接口
+const getUserInfo = () => {
+  return request({
+    url: '/user/info',
+    method: 'GET'
+  })
+}
+
+// 获取用户权限接口
+const getPermissionList = () => {
+  return request({
+    url: '/menu/nav',
+    method: 'GET'
+  })
+}
+
 export default {
   getCaptcha,
-  login
+  login,
+  getUserInfo,
+  getPermissionList
 }
