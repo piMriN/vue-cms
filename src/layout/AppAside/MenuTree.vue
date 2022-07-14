@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <fragment>
     <el-menu-item
       v-if="!item.children || (item.children && item.children.length <= 0)"
       :index="item.path === '/' ? '/index' : item.path"
@@ -21,7 +21,7 @@
         :item="childItem"
       ></MenuTree>
     </el-submenu>
-  </div>
+  </fragment>
 </template>
 
 <script>
@@ -36,4 +36,4 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped></style>

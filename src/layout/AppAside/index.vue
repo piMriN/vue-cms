@@ -1,10 +1,14 @@
 <template>
   <div class="aside-container">
     <el-menu
+      :style="{ width: $store.getters.isCollapse ? '60px' : '200px' }"
       :default-active="activePath"
       text-color="#fff"
       background-color="#222d32"
       active-text-color="#ffd04b"
+      :collapse="isCollapse"
+      :collapse-transition="false"
+      unique-opened
       router
     >
       <MenuTree
@@ -30,7 +34,12 @@ export default {
       return this.$route.path
     },
     menus() {
-      return filterMenus(this.$store.getters.menus)
+      if (this.$store.getters.menus) {
+        return filterMenus(this.$store.getters.menus)
+      }
+    },
+    isCollapse() {
+      return this.$store.getters.isCollapse
     }
   },
   components: {
@@ -43,6 +52,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.aside-container {
+  width: auto;
+}
 .el-menu {
   border-right: none;
 }

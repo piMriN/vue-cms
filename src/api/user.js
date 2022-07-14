@@ -41,9 +41,18 @@ const getPermissionList = () => {
   })
 }
 
+// 退出登录
+const logout = () => {
+  return request({
+    url: '/logout',
+    method: 'POST'
+  })
+}
+
 export default {
   getCaptcha,
   login,
   getUserInfo,
-  getPermissionList
+  getPermissionList,
+  logout
 }
